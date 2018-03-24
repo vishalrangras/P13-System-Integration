@@ -43,6 +43,7 @@ class CarData(object):
         self.steer_ratio = None
         self.max_lat_accel = None
         self.max_steer_angle = None
+        self.min_speed = None
 
 class DBWNode(object):
     def __init__(self):
@@ -60,6 +61,7 @@ class DBWNode(object):
         car_data.steer_ratio = rospy.get_param('~steer_ratio', 14.8)
         car_data.max_lat_accel = rospy.get_param('~max_lat_accel', 3.)
         car_data.max_steer_angle = rospy.get_param('~max_steer_angle', 8.)
+        car_data.min_speed = 0.1
 
         self.steer_pub = rospy.Publisher('/vehicle/steering_cmd',
                                          SteeringCmd, queue_size=1)

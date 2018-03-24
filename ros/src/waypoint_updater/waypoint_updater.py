@@ -53,7 +53,7 @@ class WaypointUpdater(object):
         #self.msg_seq = 1
 
         self.waypoints = None
-        self.final_waypoints = Lane()
+        self.final_waypoints = None
         self.no_waypoints = None
 
         self.closest = None #May remove it later
@@ -66,9 +66,9 @@ class WaypointUpdater(object):
         distance = 1E10
         closest_waypoint_index = -1000
         for index, waypoint in enumerate(self.waypoints):
-            waypoint_distance = math.sqrt((self.car_x - wp.pose.pose.position.x)**2 +\
-                                          (self.car_y - wp.pose.pose.position.y)**2 +\
-                                          (self.car_z - wp.pose.pose.position.z)**2)
+            waypoint_distance = math.sqrt((self.car_x - waypoint.pose.pose.position.x)**2 +\
+                                          (self.car_y - waypoint.pose.pose.position.y)**2 +\
+                                          (self.car_z - waypoint.pose.pose.position.z)**2)
 
             if waypoint_distance < distance:
                 distance = waypoint_distance
@@ -111,15 +111,17 @@ class WaypointUpdater(object):
         self.car_roll, self.car_pitch, self.car_yaw = tf.transformations.euler_from_quaternion(quaternion)
 
         if self.final_waypoints is not None:
+            #rospy.loginfo('Final Waypoints is not None.')
             self.final_waypoints_pub.publish(self.final_waypoints)
         else:
+            rospy.loginfo('Final Waypoints is None.')
             self.final_waypoints = self.get_next_waypoints()
             self.final_waypoints_pub.publish(self.final_waypoints)
 
-    def waypoints_cb(self, waypoints):
+    def waypoints_cb(self, msg):
         # TODO: Implement
         self.waypoints = msg.waypoints
-        self.no_waypoints = len(mgs.waypoints)
+        self.no_waypoints = len(msg.waypoints)
 
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement

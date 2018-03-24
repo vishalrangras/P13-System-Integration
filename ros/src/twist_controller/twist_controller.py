@@ -11,6 +11,7 @@ class Controller(object):
         # TODO: Implement
         self.yaw_controller = YawController(wheel_base=car_data.wheel_base,
                                             steer_ratio=car_data.steer_ratio,
+                                            min_speed=car_data.min_speed,
                                             max_lat_accel=car_data.max_lat_accel,
                                             max_steer_angle=car_data.max_steer_angle)
 
